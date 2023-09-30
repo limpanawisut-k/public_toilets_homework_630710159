@@ -32,8 +32,12 @@ class ToiletListItem extends StatelessWidget {
                 Row(
                   children: [
                     // collection if, ไม่ใช่ if statement
-                    if (toilet.point > 2.5)
+                    if (toilet.point >= 2.5)
                       Text('GOOD'),
+                    if (toilet.point < 2.5 && toilet.point >= 1.5)
+                      Text('FAIR'),
+                    if (toilet.point < 1.5)
+                      Text('BAD'),
 
                     // collection for, ไม่ใช่ for statement
                     for (var i = 0; i < toilet.point.floor(); i++) 
