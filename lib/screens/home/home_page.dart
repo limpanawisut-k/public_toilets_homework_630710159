@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:public_toilets/models/toilet.dart';
 import 'package:public_toilets/repositories/toilet_repository.dart';
@@ -17,6 +19,28 @@ class _HomePageState extends State<HomePage> {
   final _toiletPointController = TextEditingController();
   final _toiletDistanceController = TextEditingController();
 
+
+  @override
+  void initState() {
+    super.initState();
+    var data = ToiletRepository.readJsonData('assets/data/toilets.json');
+    data.then(getResult);
+  }
+
+  getResult(String result) {
+    debugPrint(result);
+    List list = jsonDecode(result);
+    List<Toilet> toiletList = list.map((item) {
+      return Toilet.fromJson(item);
+    }).toList();
+
+    setState(() {
+      ToiletRepository.toilets = toiletList;
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,9 +51,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: ToiletRepository.toilets.length,
+              itemCount: ToiletRepository.toilets!.length,
               itemBuilder: (ctx, i) {
-                Toilet toilet = ToiletRepository.toilets[i];
+                Toilet toilet = ToiletRepository.toilets![i];
 
                 return ToiletListItem(
                   toilet: toilet,
@@ -99,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                       );
 
                       setState(() {
-                        ToiletRepository.toilets.add(toilet);
+                        ToiletRepository.toilets!.add(toilet);
                       });
 
                       _toiletNameController.clear();

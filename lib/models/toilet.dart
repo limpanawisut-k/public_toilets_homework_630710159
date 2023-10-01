@@ -8,4 +8,12 @@ class Toilet {
     required this.point,
     required this.distance,
   });
+
+  factory Toilet.fromJson(Map<String , dynamic> json){
+      return Toilet(
+        name: json['name'],
+        point: json['rating'],
+        distance: json['distance']
+      );
+  }
 }
